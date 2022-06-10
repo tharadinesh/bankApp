@@ -3,13 +3,11 @@
     <a class="navbar-brand  " href="#" style="color:rgb(85, 98, 237);"><b>&#169; HAFC Bank Pvt.Ltd </b></a>
     <span class="quote text-light">Giving you freedom...</span>
   </nav>
-  <div class="row">
-    <div class="col"></div>
-    <div class="col"></div>
-    
-  </div>
-  <div class="col"> <h1 style="color:white">Welcome {{user}} </h1></div>
-
+  
+   <h1 style="color:white">Welcome {{user}}</h1>
+  <a routerLink="/transaction">View Transaction</a>
+  <button class="btn btn-info" (click)="logout()" style="float: right;margin-right:20px">Log Out</button>
+<hr>
   <div class="container col-md-12 mt-0">
     <div class="d-flex justify-content-center h-100">
       <div class="card">

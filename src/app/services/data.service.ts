@@ -5,12 +5,43 @@ import { Injectable } from '@angular/core';
 })
 export class DataService {
 currentUser:any
+currentAcno:any
 db:any={
-  1000:{"acno":1000,"username":"Ram","password":1000,"balance":5000},
-  1001:{"acno":1001,"username":"Raju","password":1001,"balance":10000},
-  1002:{"acno":1002,"username":"Tom","password":1002,"balance":25000}
+  1000:{"acno":1000,"username":"Ram","password":1000,"balance":5000,transaction:[]},
+  1001:{"acno":1001,"username":"Raju","password":1001,"balance":10000,transaction:[]},
+  1002:{"acno":1002,"username":"Tom","password":1002,"balance":25000,transaction:[]}
 }
-  constructor() {}
+  constructor() {
+
+this.getdetails()
+
+  }
+//getdetails
+
+
+getdetails()
+{
+  if(localStorage .getItem("database"))
+  {
+    this.db=JSON.parse(localStorage.getItem("database")||' ')
+    
+  }
+  if(localStorage .getItem("CurrentUser"))
+  {
+    this.currentUser=JSON.parse(localStorage.getItem("CurrentUser")||' ')
+    
+  }
+  if(localStorage .getItem("CurrentAcno"))
+  {
+    this.currentAcno=JSON.parse(localStorage.getItem("CurrentAcno")||' ')
+    
+  }
+
+}
+
+
+
+
 //savedetails()
 saveDetails(){
   if(this.db){
@@ -19,6 +50,10 @@ saveDetails(){
   if(this.currentUser){
     localStorage.setItem("CurrentUser",JSON.stringify(this.currentUser))
   }
+  if(this.currentAcno){
+    localStorage.setItem("CurrentAcno",JSON.stringify(this.currentAcno))
+  }
+  
 }
 
    
@@ -29,11 +64,13 @@ saveDetails(){
    let db = this.db
    if(acno in db)
    {
-    console.log(db[acno]["password"])
-    this.currentUser=db[acno]["username"]
-    this.saveDetails()
+    //console.log(db[acno]["password"])
+    
      if(pswd == db[acno]["password"])
      {
+      this.currentUser=db[acno]["username"]
+      this.currentAcno=acno
+      this.saveDetails()
         return true
   
      }
@@ -65,7 +102,9 @@ saveDetails(){
           acno,
           username,
         password,
-         "balance":0
+         "balance":0,
+         transaction:[]
+
         }
         console.log(db)
         this.saveDetails()
@@ -80,10 +119,13 @@ saveDetails(){
       if(pswd ==db[acno]["password"])
             {
               db[acno]["balance"]+=amount;
+              db[acno].transaction.push({
+                type:"credit",
+                amount:amount
+              })
               this.saveDetails()
               return db[acno]["balance"]
-              console.log()
-
+             
       }
       else
       {
@@ -98,18 +140,24 @@ saveDetails(){
     }
 
   }
-  withdraw(acno1:any,pswd1:any,amt1:any)
+  withdraw(acno:any,pswd:any,amt:any)
   {let db=this.db
-    var amount=parseInt(amt1)
-    if(acno1 in db)
+    //console.log(acno)
+
+    var amount=parseInt(amt)
+    if(acno in db)
     {
-      if(pswd1 ==db[acno1]["password"])
+      if(pswd ==db[acno]["password"])
             {
-              if(db[acno1]["balance"]>amount)
+              if(db[acno]["balance"]>amount)
               {
-                db[acno1]["balance"]-=amount;
+                db[acno]["balance"]-=amount;
+                db[acno].transaction.push({
+                  type:"debit",
+                  amount:amount
+                })
                 this.saveDetails()
-                return db[acno1]["balance"]
+                return db[acno]["balance"]
               }
              else{
                alert("insufficient balance")
@@ -130,5 +178,10 @@ saveDetails(){
     }
 
   }
+
+  getTransaction(acno:any)
+  {
+    return(this.db[acno].transaction);
   }
+}
 

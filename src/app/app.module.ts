@@ -7,13 +7,15 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { DasbhoardComponent } from './dasbhoard/dasbhoard.component';
+import { TransactionComponent } from './transaction/transaction.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    DasbhoardComponent
+    DasbhoardComponent,
+    TransactionComponent
   ],
   imports: [
     BrowserModule,

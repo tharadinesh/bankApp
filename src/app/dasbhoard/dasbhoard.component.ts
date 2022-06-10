@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DataService } from '../services/data.service';
 
 @Component({
@@ -11,12 +12,18 @@ export class DasbhoardComponent implements OnInit {
 
 user:any
 
-  constructor(private ds:DataService ,private fb:FormBuilder) {
+  constructor(private ds:DataService ,private fb:FormBuilder,private router:Router) {
 
 this.user=this.ds.currentUser
    }
+  
 
   ngOnInit(): void {
+    if(!localStorage.getItem("CurrentAcno"))
+    {
+      alert("please log In")
+      this.router.navigateByUrl("")
+    }
   }
   //dashboard form means deposit form
   dashboardForm=this.fb.group({
@@ -54,9 +61,9 @@ else
   
 withdraw()
 {
-  var acno=this.withdrawForm.value.acno1
-  var pswd=this.withdrawForm.value.pswd1
-  var amt=this.withdrawForm.value.amt1
+  var acno=this.withdrawForm.value.acno
+  var pswd=this.withdrawForm.value.pswd
+  var amt=this.withdrawForm.value.amt
   if(this.withdrawForm.valid){
 
   const result=this.ds.withdraw(acno,pswd,amt)
@@ -68,6 +75,12 @@ else{
   alert("invalid form")
 }
 }
+logout()
+{
+  localStorage.removeItem("CurrentAcno")
+  localStorage.removeItem("CurrentUser")
+  this.router.navigateByUrl("")
 
+}
 
 }
