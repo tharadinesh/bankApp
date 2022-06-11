@@ -11,10 +11,11 @@ import { DataService } from '../services/data.service';
 export class DasbhoardComponent implements OnInit {
 
 user:any
-
+lDate:any
   constructor(private ds:DataService ,private fb:FormBuilder,private router:Router) {
 
 this.user=this.ds.currentUser
+this.lDate=new Date()
    }
   
 
