@@ -12,6 +12,8 @@ export class DasbhoardComponent implements OnInit {
 
 user:any
 lDate:any
+acno:any
+
   constructor(private ds:DataService ,private fb:FormBuilder,private router:Router) {
 
 this.user=this.ds.currentUser
@@ -83,5 +85,13 @@ logout()
   this.router.navigateByUrl("")
 
 }
+deleteAccount()
+{
+  this.acno=JSON.parse(localStorage.getItem("CurrentAcno")||'')
 
+}
+cancel()
+{
+  this.acno=""
+}
 }

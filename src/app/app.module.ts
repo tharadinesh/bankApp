@@ -10,6 +10,8 @@ import { DasbhoardComponent } from './dasbhoard/dasbhoard.component';
 import { TransactionComponent } from './transaction/transaction.component';
 import { AnimationComponent } from './animation/animation.component';
 import { AnimationDemoComponent } from './animation-demo/animation-demo.component';
+import { DeleteComponent } from './delete/delete.component';
+import { HighlightDirective } from './highlight.directive';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { AnimationDemoComponent } from './animation-demo/animation-demo.componen
     DasbhoardComponent,
     TransactionComponent,
     AnimationComponent,
-    AnimationDemoComponent
+    AnimationDemoComponent,
+    DeleteComponent,
+    HighlightDirective
   ],
   imports: [
     BrowserModule,

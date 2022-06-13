@@ -3,23 +3,21 @@
     <a class="navbar-brand  " href="#" style="color:rgb(85, 98, 237);"><b>&#169; HAFC Bank Pvt.Ltd </b></a>
     <span class="quote text-light">Giving you freedom...</span>
   </nav>
-  
+  <button class="btn btn-info" (click)="logout()" style="float: right;margin-right:20px">LogOut</button>
+
    <h1 style="color:white">Welcome {{user}}</h1>
+   <button class="btn btn-danger" (click)="deleteAccount()" style="float: right;margin-right:20px">delete</button>
 
    <h5 style="color: white;">{{lDate|date:'short' }}</h5>
-
-
-
-
+  <hr>
   <a routerLink="/transaction">View Transaction</a>
-
-<app-animation></app-animation>
-  <button class="btn btn-info" (click)="logout()" style="float: right;margin-right:20px">Log Out</button>
+<app-delete [item]="acno" (onCancel)="cancel()"></app-delete>
+<!-- <app-animation></app-animation> -->
 <hr>
-  <div class="container col-md-12 mt-0">
+  <div  [ngClass]="acno?'c1':''" class="container col-md-12 mt-0">
     <div class="d-flex justify-content-center h-100">
       <div class="card">
-        <div class="card-header">
+        <div  appHighlight  class="card-header">
           <h3 class="text-center">Deposit Form</h3>
           
         </div>
@@ -74,10 +72,10 @@
     
   </div>
   
-  <div class="container col-md-12 mt-0">
+  <div [ngClass]="acno?'c1':''" class="container col-md-12 mt-0">
     <div class="d-flex justify-content-center h-100">
       <div class="card">
-        <div class="card-header">
+        <div  appHighlight class="card-header">
           <h3 class="text-center">withdrawal Form</h3>
           
         </div>
