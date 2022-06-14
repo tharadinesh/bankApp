@@ -11,7 +11,7 @@ import { TransactionComponent } from './transaction/transaction.component';
 import { AnimationComponent } from './animation/animation.component';
 import { AnimationDemoComponent } from './animation-demo/animation-demo.component';
 import { DeleteComponent } from './delete/delete.component';
-import { HighlightDirective } from './highlight.directive';
+import { HighlightDirective } from './directive/highlight.directive';
 
 @NgModule({
   declarations: [
@@ -24,6 +24,7 @@ import { HighlightDirective } from './highlight.directive';
     AnimationDemoComponent,
     DeleteComponent,
     HighlightDirective
+    
   ],
   imports: [
     BrowserModule,
