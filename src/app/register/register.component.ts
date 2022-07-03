@@ -35,20 +35,26 @@ registerForm=this.fb.group({
     var uname=this.registerForm.value.uname
     var acno=this.registerForm.value.acno
     var pswd=this.registerForm.value.pwd
-    console.log(this.registerForm.valid)
+   // console.log(this.registerForm.valid)
     
     if(this.registerForm.valid)
     {
-      const result=this.ds.register(uname,acno,pswd)
-      if(result)
-      {
-        alert("Successfully registered")
-        this.router.navigateByUrl("")
+     this.ds.register(uname,acno,pswd)
+      .subscribe((result:any)=>{
+        if(result)
+        {
+          alert(result.message)
+          this.router.navigateByUrl("")
+        }
+       
+      },
+      result=>{
+        alert(result.error.message);
+    
       }
-      else{
-        alert("Already Existing User..........Please Login!!!!")
-        this.router.navigateByUrl("")
-      }
+      )
+     
+     
     }
     else{
       alert("Inavlid form")

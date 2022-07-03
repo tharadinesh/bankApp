@@ -16,17 +16,17 @@ acno:any
 
   constructor(private ds:DataService ,private fb:FormBuilder,private router:Router) {
 
-this.user=this.ds.currentUser
+this.user=localStorage.getItem('currentUser')
 this.lDate=new Date()
    }
   
 
   ngOnInit(): void {
-    if(!localStorage.getItem("CurrentAcno"))
-    {
-      alert("please log In")
-      this.router.navigateByUrl("")
-    }
+    // if(!localStorage.getItem("CurrentAcno"))
+    // {
+    //   alert("please log In")
+    //   this.router.navigateByUrl("")
+    // }
   }
   //dashboard form means deposit form
   dashboardForm=this.fb.group({
@@ -51,10 +51,15 @@ deposit()
   var pswd=this.dashboardForm.value.pswd
   var amt=this.dashboardForm.value.amt
   if(this.dashboardForm.valid){
-  const result=this.ds.deposit(acno,pswd,amt)
-  if(result){
-    alert(amt+" deposited successfully and new balance is "+result)
-  }
+  this.ds.deposit(acno,pswd,amt)
+  .subscribe((result:any)=>{
+    if(result){
+      alert(result.message)
+    }
+  },
+  result=>{
+    alert(result.error.message)
+  })
 }
 else
 {
@@ -69,10 +74,17 @@ withdraw()
   var amt=this.withdrawForm.value.amt
   if(this.withdrawForm.valid){
 
-  const result=this.ds.withdraw(acno,pswd,amt)
-  if(result){
-    alert(amt+" successfully withdrawed and new balance is "+result)
+  this.ds.withdraw(acno,pswd,amt)
+  .subscribe((result:any)=>{
+ if(result){
+    alert(result.message)
   }
+
+},
+result=>{
+  alert(result.error.message)
+})
+ 
 }
 else{
   alert("invalid form")

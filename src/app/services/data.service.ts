@@ -1,5 +1,10 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+const options={
+  headers:new HttpHeaders()
 
+
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -11,36 +16,33 @@ db:any={
   1001:{"acno":1001,"username":"Raju","password":1001,"balance":10000,transaction:[]},
   1002:{"acno":1002,"username":"Tom","password":1002,"balance":25000,transaction:[]}
 }
-  constructor() {
+  constructor(private http:HttpClient) {
 
-this.getdetails()
+//this.getdetails()
 
   }
 //getdetails
 
 
-getdetails()
-{
-  if(localStorage .getItem("database"))
-  {
-    this.db=JSON.parse(localStorage.getItem("database")||' ')
+// getdetails()
+// {
+//   if(localStorage .getItem("database"))
+//   {
+//     this.db=JSON.parse(localStorage.getItem("database")||' ')
     
-  }
-  if(localStorage .getItem("CurrentUser"))
-  {
-    this.currentUser=JSON.parse(localStorage.getItem("CurrentUser")||' ')
+//   }
+//   if(localStorage .getItem("CurrentUser"))
+//   {
+//     this.currentUser=JSON.parse(localStorage.getItem("CurrentUser")||' ')
     
-  }
-  if(localStorage .getItem("CurrentAcno"))
-  {
-    this.currentAcno=JSON.parse(localStorage.getItem("CurrentAcno")||' ')
+//   }
+//   if(localStorage .getItem("CurrentAcno"))
+//   {
+//     this.currentAcno=JSON.parse(localStorage.getItem("CurrentAcno")||' ')
     
-  }
+//   }
 
-}
-
-
-
+// }
 
 //savedetails()
 saveDetails(){
@@ -59,123 +61,159 @@ saveDetails(){
    
  
   login(acno:any,pswd:any)
-  {
-  
-   let db = this.db
-   if(acno in db)
-   {
-    //console.log(db[acno]["password"])
+  { const data={
+    acno,
+    pswd
+  }
+  return this.http.post('http://localhost:3000/login',data)
+  //  let db = this.db
+  //  if(acno in db)
+  //  {
+  //   //console.log(db[acno]["password"])
     
-     if(pswd == db[acno]["password"])
-     {
-      this.currentUser=db[acno]["username"]
-      this.currentAcno=acno
-      this.saveDetails()
-        return true
+  //    if(pswd == db[acno]["password"])
+  //    {
+  //     this.currentUser=db[acno]["username"]
+  //     this.currentAcno=acno
+  //     this.saveDetails()
+  //       return true
   
-     }
-     else{
+  //    }
+  //    else{
        
-       alert("incorrect  password")
-       return false
-     }
-   }
-   else
-   {
-      alert("user not exists")
-      return false
-   }
+  //      alert("incorrect  password")
+  //      return false
+  //    }
+  //  }
+  //  else
+  //  {
+  //     alert("user not exists")
+  //     return false
+  //  }
   
   }
   
   //register
   register(username:any,acno:any,password:any)
-  {
-      let db =this.db
-      if(acno in db)
-      {
-        return false
-        
-      }
-      else{
-        db[acno]={
-          acno,
-          username,
-        password,
-         "balance":0,
-         transaction:[]
-
-        }
-        console.log(db)
-        this.saveDetails()
-        return true
-      }
+  { const data:any={
+    username,
+    acno,
+    password
   }
-  deposit(acno:any,pswd:any,amt:any)
-  {let db=this.db
-    var amount=parseInt(amt)
-    if(acno in db)
+  //asychronous call
+   return this.http.post('http://localhost:3000/register',data)
+      // let db =this.db
+      // if(acno in db)
+      // {
+      //   return false
+        
+      // }
+      // else{
+      //   db[acno]={
+      //     acno,
+      //     username,
+      //   password,
+      //    "balance":0,
+      //    transaction:[]
+
+      //   }
+      //   console.log(db)
+      //   this.saveDetails()
+      //   return true
+      // }
+  }
+  getOptions()
+  {  //function to create headers
+    const token=localStorage.getItem('token') 
+    let headers=new HttpHeaders()
+    if(token)
     {
-      if(pswd ==db[acno]["password"])
-            {
-              db[acno]["balance"]+=amount;
-              db[acno].transaction.push({
-                type:"credit",
-                amount:amount
-              })
-              this.saveDetails()
-              return db[acno]["balance"]
+    headers= headers.append('x-access-token',token)
+    options.headers=headers
+    
+  }
+  return options
+}
+ deposit(acno:any,pswd:any,amt:any)
+  {
+      const data={
+        acno,pswd,amt
+
+      }
+     
+      
+return this.http.post('http://localhost:3000/deposit',data,this.getOptions())
+
+    // let db=this.db
+    // var amount=parseInt(amt)
+    // if(acno in db)
+    // {
+    //   if(pswd ==db[acno]["password"])
+    //         {
+    //           db[acno]["balance"]+=amount;
+    //           db[acno].transaction.push({
+    //             type:"credit",
+    //             amount:amount
+    //           })
+    //           this.saveDetails()
+    //           return db[acno]["balance"]
              
-      }
-      else
-      {
-        alert("Incorrect password")
-        return false
-      }
-    }
-    else
-    {
-      alert("user doesnot Exist!")
-      return false
-    }
+    //   }
+    //   else
+    //   {
+    //     alert("Incorrect password")
+    //     return false
+    //   }
+    // }
+    // else
+    // {
+    //   alert("user doesnot Exist!")
+    //   return false
+    // }
 
   }
   withdraw(acno:any,pswd:any,amt:any)
-  {let db=this.db
-    //console.log(acno)
+  {
+    const data={
+      acno,pswd,amt
 
-    var amount=parseInt(amt)
-    if(acno in db)
-    {
-      if(pswd ==db[acno]["password"])
-            {
-              if(db[acno]["balance"]>amount)
-              {
-                db[acno]["balance"]-=amount;
-                db[acno].transaction.push({
-                  type:"debit",
-                  amount:amount
-                })
-                this.saveDetails()
-                return db[acno]["balance"]
-              }
-             else{
-               alert("insufficient balance")
-               return false
-             }     
+    }
+    return this.http.post('http://localhost:3000/withdraw',data,this.getOptions())
+    // let db=this.db
+    // //console.log(acno)
 
-      }
-      else
-      {
-        alert("Incorrect password")
-        return false
-      }
-    }
-    else
-    {
-      alert("user doesnot Exist!")
-      return false
-    }
+    // var amount=parseInt(amt)
+    // if(acno in db)
+    // {
+    //   if(pswd ==db[acno]["password"])
+    //         {
+    //           if(db[acno]["balance"]>amount)
+    //           {
+    //             db[acno]["balance"]-=amount;
+    //             db[acno].transaction.push({
+    //               type:"debit",
+    //               amount:amount
+    //             })
+    //             this.saveDetails()
+    //             return db[acno]["balance"]
+    //           }
+    //          else{
+    //            alert("insufficient balance")
+    //            return false
+    //          }     
+
+    //   }
+    //   else
+    //   {
+    //     alert("Incorrect password")
+    //     return false
+    //   }
+    // }
+    // else
+    // {
+    //   alert("user doesnot Exist!")
+    //   return false
+    // }
 
   }
 
